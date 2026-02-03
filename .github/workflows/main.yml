@@ -3,13 +3,13 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    # FONTOS: Visszaállunk a régebbi, stabil Linuxra!
+    # 1. A TITOK: Stabil, régebbi rendszert használunk (nem a legújabbat)
     runs-on: ubuntu-20.04
-    
+
     steps:
       - uses: actions/checkout@v2
 
-      # Telepítjük a hiányzó eszközöket (libtool-bin, stb.)
+      # 2. Minden szükséges eszköz telepítése (hogy ne legyen hibaüzenet)
       - name: Install System Dependencies
         run: |
           sudo apt-get update
@@ -20,12 +20,20 @@ jobs:
             autoconf automake libtool libtool-bin pkg-config \
             openjdk-11-jdk
 
+      # 3. Buildozer telepítése
       - name: Install Buildozer
         run: |
           pip3 install --user --upgrade Cython==0.29.33 buildozer virtualenv
 
+      # 4. A FORDÍTÁS (A "yes" paranccsal, hogy ne akadjon el kérdéseknél)
       - name: Build APK
         run: |
-          # FONTOS: Nincs "yes |" az elején!
-          buildozer android debug
+          yes | buildozer android debug
+
+      # 5. A LETÖLTÉS (Ez teszi elérhetővé a kész fájlt a végén)
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: orszem-apk
+          path: bin/*.apk
           
