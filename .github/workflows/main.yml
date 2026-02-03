@@ -28,7 +28,7 @@ jobs:
       # 4. A FORDÍTÁS (Itt a trükk: a yes helyett környezeti változót használunk)
       - name: Build with Buildozer
         env:
-          # Ez a sor automatikusan elfogadja a licencet kérdés nélkül!
+          # Ez a sor segít elfogadni bizonyos kérdéseket
           y: "y"
         run: |
           buildozer android debug
@@ -39,5 +39,4 @@ jobs:
         with:
           name: Orszem-App
           path: bin/*.apk
-          name: orszem-apk
-          path: bin/*.apk
+          
